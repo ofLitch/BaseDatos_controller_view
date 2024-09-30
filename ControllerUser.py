@@ -155,10 +155,10 @@ class Controller:
             while True:
                 data, client_address = self.server_socket.recvfrom(buffer_size)
                 decrypted_message = data.decode()
-                return [decrypted_message,client_address]
+
         except Exception as e:
             print(f"Error while receiving message: {e}")
-
+        return [decrypted_message, client_address]
     def control(self):
 
         listenIn = self.listen()
@@ -241,44 +241,53 @@ class Controller:
         # Parsear el mensaje JSON
         try:
             json_data = json.loads(listenMethod[0])
-            message = json_data.get("message")
+            message = json_data.get("method")
 
             if message == "isRegister":
                 self.server_socket.sendto(idRegisterCrip.encode('utf-8'), listenMethod[1])
                 listenID =self.listen()
                 json_dataID = json.loads(listenID[0])
                 messageID = json_dataID.get("id")
-                search = self.read_data_user(int(messageID))
+                try:
+                    search = self.read_data_user(int(messageID))
+                except:
+                    print("don't find")
+                    search = '0'
                 if int(message) == search:
+
                     self.server_socket.sendto(json_munu.encode('utf-8'), listenID[1])
                     listenOption = self.listen()
                     json_data = json.loads(listenOption[0])
-                    message1 = json_data.get("message")
+                    message1 = json_data.get("option")
 
                     if message1 == '1':
 
                         self.server_socket.sendto(json_munu_func.encode('utf-8'), listenID[1])
                         listenOption2 = self.listen()
                         json_data = json.loads(listenOption2[0])
-                        message2 = json_data.get("message")
+                        message2 = json_data.get("option")
 
                     elif message1 == '2':
 
                         self.server_socket.sendto(json_menu_funcGroup.encode('utf-8'), listenID[1])
                         listenOption2 = self.listen()
                         json_data = json.loads(listenOption2[0])
-                        message2 = json_data.get("message")
+                        message2 = json_data.get("option")
 
                     elif message1 == '3' or '4' or '5':
                         self.server_socket.sendto(json_munu_func3table.encode('utf-8'),listenID[1])
                         listenOption2 = self.listen()
                         json_data = json.loads(listenOption2[0])
-                        message2 = json_data.get("message")
+                        message2 = json_data.get("option")
 
 
                     if message1 == '1' and message2 == '1':
-                        self.delete_user(int(messageID))
-                        self.server_socket.sendto(jsonOK,listenID[1])
+
+                        try:
+                            self.delete_user(int(messageID))
+                        except:
+                            print("error delete")
+                            self.server_socket.sendto(jsonOK,listenID[1])
 
                     elif message1 == '1' and message2 == '2':
 
@@ -295,7 +304,7 @@ class Controller:
                         self.server_socket.sendto(json_munu_change.encode('utf-8'), listenID[1]) # envia lista de opciones
                         listenDataChange = self.listen()
                         json_data_listen = json.loads(listenDataChange[0])
-                        option = json_data_listen.get("message")
+                        option = json_data_listen.get("option")
                         listenDataChangeMessage = option
 
                         if listenDataChangeMessage == '1':
@@ -307,10 +316,13 @@ class Controller:
 
                         listenChange = self.listen()
                         listenChangeArrive = json.loads(listenChange[0])
-                        listenChangeArriveMessage = listenChangeArrive.get("message")
+                        listenChangeArriveMessage = listenChangeArrive.get("option")
                         listenChangeData = listenChangeArriveMessage
 
-                        self.change_data_user(int(messageID),column,listenChangeData)
+                        try:
+                             self.change_data_user(int(messageID),column,listenChangeData)
+                        except:
+                             print("error change")
 
                     elif message1 == '1' and message2 == '3':
                         self.server_socket.sendto(jsonOK.encode('utf-8'), listenID[1])
@@ -321,11 +333,15 @@ class Controller:
                         self.server_socket.sendto(json_informationClientB.encode('utf-8'), listenID[1])
                         listenMessages = self.listen()
                         json_dataMessage = json.loads(listenMessages[0])
-                        json_dataMessageT = json_dataMessage.get("message")
-                        ## envio de mensajes al otro cliente , para esto
-                        # leer el port y ip del otro cliente, agregar la funcion de redireccion de mensajes
+                        IP = json_dataMessage("IP")
+                        PORT = json_dataMessage("PORT")
+                        self.server_socket.sendto(json_dataMessage,(IP, int(PORT)))
+                        self.server_socket.sendto(jsonOK.encode('utf-8'), messageID)
                     elif message1 == '1' and message2 == '4':
-                        all_data_user = self.read_all(int(messageID))
+                        try:
+                            all_data_user = self.read_all(int(messageID))
+                        except:
+                            print("error read user")
                         data_dict = {
                             "id": all_data_user[0],
                             "name": all_data_user[1],
@@ -350,7 +366,10 @@ class Controller:
                         json_dataMessage = json.loads(listenDataGroup[0])
                         idG = json_dataMessage.get("id")
                         nameG = json_dataMessage.get("Name")
-                        self.add_group(int(idG),nameG)
+                        try:
+                            self.add_group(int(idG),nameG)
+                        except:
+                            print("error add group")
                     elif message1 == '2' and message2 == '2':
                         menu_changeG = {
                             "options to upload": "name",
@@ -361,8 +380,11 @@ class Controller:
                         listenChange = self.listen()
                         listenChangeDataMessage = json.loads(listenChange[0])
                         listenChangeData = listenChangeDataMessage.get("name")
-                        self.change_data_group(int(messageID), "nameG", listenChangeData)
-                        self.server_socket.sendto(jsonOK.encode('utf-8'),listenID[1])
+                        try:
+                            self.change_data_group(int(messageID), "nameG", listenChangeData)
+                        except:
+                            print("error change data group")
+                            self.server_socket.sendto(jsonOK.encode('utf-8'),listenID[1])
 
                     elif message1 == '2' and message2 == '1':
 
@@ -375,8 +397,11 @@ class Controller:
                         listenDeleteGroup = self.listen()
                         listenDeleteGroupMessage = json.loads(listenDeleteGroup[0])
                         id_GroupDelete = listenDeleteGroupMessage.get("id")
-                        self.delete_group(int(id_GroupDelete))
-                        self.server_socket.sendto (jsonOK.encode('utf-8'), listenID[1])
+                        try:
+                            self.delete_group(int(id_GroupDelete))
+                        except:
+                            print("error delete group")
+                            self.server_socket.sendto (jsonOK.encode('utf-8'), listenID[1])
 
                     elif message1 == '2' and message2 == '5':
 
@@ -390,7 +415,10 @@ class Controller:
                         listenIDgroup = self.listen()
                         listenIDgroupMessage = json.loads(listenIDgroup[0])
                         id_group = listenIDgroupMessage.get("id")
-                        Data_Group = self.read_data_group(int(id_group))
+                        try:
+                            Data_Group = self.read_data_group(int(id_group))
+                        except:
+                            print("error read data group")
                         Data_Group_list = {
                             "id":Data_Group[0],
                             "name": Data_Group[1],
@@ -411,7 +439,10 @@ class Controller:
                         listenDeleteFriendshipMessage = json.loads(listenDeleteFriendship[0])
                         IdfriendshipDelete = listenDeleteFriendshipMessage.get("id")
 
-                        self.delete_friendship(int(IdfriendshipDelete))
+                        try:
+                            self.delete_friendship(int(IdfriendshipDelete))
+                        except:
+                            print("error delete friendship")
                         self.server_socket.sendto (jsonOK.encode('utf-8'),listenIn[1])
                     elif message1 == '3' and message2 == '2':
                         id_friendship = {
@@ -428,7 +459,11 @@ class Controller:
                         listenChange = self.listen()
                         listenChangeMessage = json.loads(listenChange[0])
                         change = listenChangeMessage.get("change")
-                        self.change_friendship(idFriendship,"id",change)
+
+                        try:
+                            self.change_friendship(idFriendship,"id",change)
+                        except:
+                            print("error changefriendship")
                         self.server_socket.sendto(jsonOK.encode('utf-8'),listenID[1])
                     elif message1 == '3' and message2 == '3':
                         data_relationship = {
@@ -443,7 +478,11 @@ class Controller:
                         listenDataRMessage = json.loads(listenDataR[0])
                         id_relationship = listenDataRMessage.get("id_relationship")
                         id_friend = listenDataRMessage.get("id_friend")
-                        self.add_user_frienship(int(id_relationship),int(messageID),int(id_friend))
+
+                        try:
+                            self.add_user_frienship(int(id_relationship),int(messageID),int(id_friend))
+                        except:
+                            print("error add_user_friendship")
                         self.server_socket.sendto(jsonOK,listenID[1])
                     elif message1 == '3' and message2 == '4':
                         data_relationship = {
@@ -455,12 +494,16 @@ class Controller:
                         listenDataR = self.listen()
                         listenDataRMessage = json.loads(listenDataR[0])
                         id = listenDataRMessage.get("id_relationship")
-                        datos = self.read_friendship(int(id))
+                        try:
+                            datos = self.read_friendship(int(id))
+                        except:
+                            print("error read friendship")
 
                         Data = {
                             "id": datos[0],
                             "id_user": datos[1],
                             "id_friend": datos[2],
+                            "creation_group":datos[3],
                         }
                         jsonData = json.dumps(Data)
                         self.server_socket.sendto(jsonData.encode('utf-8'),listenID[1])
@@ -476,7 +519,10 @@ class Controller:
                         listenDeleteGUMessage = json.loads(listenDeleteGU[0])
                         IdGUDelete = listenDeleteGUMessage.get("id")
 
-                        self.delete_user_in_group(int(IdGUDelete))
+                        try:
+                            self.delete_user_in_group(int(IdGUDelete))
+                        except:
+                            print("error delete user in group")
                         self.server_socket.sendto (jsonOK.encode('utf-8'), listenIn[1])
 
                     elif message1 == '4' and message2 == '2':
@@ -494,7 +540,10 @@ class Controller:
                         listenChange = self.listen()
                         listenChangeMessage = json.loads(listenChange[0])
                         change = listenChangeMessage.get("change")
-                        self.change_data_user_group(idUG,"id",change)
+                        try:
+                            self.change_data_user_group(idUG,"id",change)
+                        except:
+                            print("error change data user group")
 
                     elif message1 == '4' and message2 == '3':
                         data_UG = {
@@ -509,7 +558,10 @@ class Controller:
                         listenDataRMessage = json.loads(listenDataUG[0])
                         id_group = listenDataRMessage.get("id_group")
                         id_user_group = listenDataRMessage.get("id_user_group")
-                        self.add_user_in_group(int(id_user_group),int(id_group),int(messageID))
+                        try:
+                            self.add_user_in_group(int(id_user_group),int(id_group),int(messageID))
+                        except:
+                            print("error add user in group")
                         self.server_socket.sendto(jsonOK,listenID[1])
 
                     elif message1 == '4' and message2 == '4':
@@ -522,7 +574,11 @@ class Controller:
                         listenDataR = self.listen()
                         listenDataRMessage = json.loads(listenDataR[0])
                         id = listenDataRMessage.get("id_user_group")
-                        datos = self.read_data_user_group(int(id))
+
+                        try:
+                            datos = self.read_data_user_group(int(id))
+                        except:
+                            print("error read data user group")
 
                         Data = {
                             "id": datos[0],
@@ -543,7 +599,10 @@ class Controller:
                         listenDeleteGUMessage = json.loads(listenDeleteB[0])
                         IdGUDelete = listenDeleteGUMessage.get("id")
 
-                        self.delete_user_blocked(int(IdGUDelete))
+                        try:
+                            self.delete_user_blocked(int(IdGUDelete))
+                        except:
+                            print("error delete user blocked")
                         self.server_socket.sendto(jsonOK.encode('utf-8'), listenIn[1])
 
                     elif message1 == '5' and message2 == '2':
@@ -561,7 +620,10 @@ class Controller:
                         listenChange = self.listen()
                         listenChangeMessage = json.loads(listenChange[0])
                         change = listenChangeMessage.get("change")
-                        self.change_data_user_group(idB, "id", change)
+                        try:
+                            self.change_data_user_blocked(idB, "id", change)
+                        except:
+                            print("error change data user blocked")
 
                     elif message1 == '5' and message2 == '3':
                         data_B = {
@@ -576,7 +638,11 @@ class Controller:
                         listenDataRMessage = json.loads(listenDataB[0])
                         id_user_blocked = listenDataRMessage.get("id_user_blocked")
                         id_blockade = listenDataRMessage.get("id_blockade")
-                        self.add_user_blocked(int(id_user_blocked), int(messageID), int(id_blockade))
+
+                        try:
+                            self.add_user_blocked(int(id_user_blocked), int(messageID), int(id_blockade))
+                        except:
+                            print("error add user blocked")
                         self.server_socket.sendto(jsonOK, listenID[1])
 
                     elif message1 == '5' and message2 == '4':
@@ -589,7 +655,10 @@ class Controller:
                         listenDataR = self.listen()
                         listenDataRMessage = json.loads(listenDataR[0])
                         id = listenDataRMessage.get("id_user_group")
-                        datos = self.read_data_user_blocked(int(id))
+                        try:
+                            datos = self.read_data_user_blocked(int(id))
+                        except:
+                            print("error read data user blocked")
 
                         Data = {
                             "id_user_blockade": datos[0],
@@ -623,8 +692,10 @@ class Controller:
                     id = listenDataRMessages.get("id")
                     name = listenDataRMessages.get("name")
                     number = listenDataRMessages.get("phone")
-
-                    self.add_user(id,name,number)
+                    try:
+                        self.add_user(id,name,number)
+                    except:
+                        print("error add user")
                     self.server_socket.sendto(jsonOK.encode('utf-8'),listenIn[1])
 
 
