@@ -37,7 +37,7 @@ class friendshipsDao:
 
             # Ejecutar la consulta con los parámetros
             cursor.execute(query, (id, id_user,id_friend))
-
+            
             # Guardar los cambios
             self.connection.commit()
 

@@ -78,25 +78,33 @@ class UserDao:
             print(f"Error doing change: {e}")
             return None
 
-    def read(self,id):
-        """Select all services for all users."""
+    def read(self, id):
+        """Select a user by id."""
         try:
             cursor = self.connection.cursor()
-            query = "SELECT user.id WHERE id = % ;"
-            cursor.execute(query,id)
-            user = cursor.fetchall()
+            query = "SELECT id FROM user WHERE id = %s LIMIT 1;"
+            cursor.execute(query, (id,))
+            user = cursor.fetchone()  # Devuelve una tupla (id,)
             cursor.close()
-            return user
+            
+            # Verificar si se encontró un usuario y retornar solo el id
+            if user:
+                return user[0]  # Devuelve el primer elemento de la tupla
+            else:
+                return None  # Si no se encuentra el usuario, devolver None
         except Error as e:
-            print(f"Error selecting user")
+            print(f"Error selecting user: {e}")
+            return None
+
+
 
     def readAll(self,id):
         """Select all services for all users."""
         try:
             cursor = self.connection.cursor()
-            query = "SELECT* WHERE id = % ;"
-            cursor.execute(query,id)
-            user = cursor.fetchall()
+            query = "SELECT * FROM user WHERE id = %s LIMIT 1;"
+            cursor.execute(query,(id,))
+            user = cursor.fetchone()
             cursor.close()
             return user
         except Error as e:
