@@ -313,28 +313,34 @@ class Controller:
         except:
             self.server_socket.sendto(jsonNoOK.encode('utf-8'), listenIn[1])
             print("error change")
-    def messageUser (self, listenID, listenIn, messageID):
+    def messageUser(self, listenID, listenIn, messageID):
+        # Primer envío al cliente para confirmar la IP
         json_informationClientB = json.dumps(informationClientB)
         self.server_socket.sendto(json_informationClientB.encode('utf-8'), listenID[1])
-        listenMessages = self.listen()
+        listenMessages = self.listen()  # Escuchar el mensaje de vuelta
         json_dataMessage = json.loads(listenMessages[0])
-        ip = json_dataMessage.get("IP")
-        
+        ip = json_dataMessage.get("IP")  # Obtener la IP
+
+        # Segundo envío al cliente para confirmar el puerto
         json_informationClientB2 = json.dumps(informationClientB2)
         self.server_socket.sendto(json_informationClientB2.encode('utf-8'), listenID[1])
-        listenMessages = self.listen()
+        listenMessages = self.listen()  # Escuchar el mensaje de vuelta
         json_dataMessage = json.loads(listenMessages[0])
-        port = json_dataMessage.get("PORT")
+        port = json_dataMessage.get("PORT")  # Obtener el puerto
 
         try:
-            print("Waiting message...")
+            print("Waiting for messages...")
             while True:
-                data, client_address = self.server_socket.recvfrom(2048)   # cambio  
-                print(data)              
+                # Recibir datos del cliente
+                data, client_address = self.server_socket.recvfrom(2046)
+                print(data)
+                # Reenviar los datos al cliente receptor (según IP y puerto obtenidos)
                 self.server_socket.sendto(data, (ip, int(port)))
+
         except Exception as e:
             print(f"Error while receiving message: {e}")
-            self.server_socket.sendto(jsonNoOK.encode('utf-8'),listenIn[1])
+            self.server_socket.sendto(jsonNoOK.encode('utf-8'), listenIn[1])
+
     def readDataUser (self, listenID, listenIn, messageID):
         try:
             json_data_listen = json.loads(listenIn[0])

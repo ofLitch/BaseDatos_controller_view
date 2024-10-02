@@ -115,6 +115,14 @@
         "documentation": {}
     },
     {
+        "label": "*",
+        "importPath": "View ",
+        "description": "View ",
+        "isExtraImport": true,
+        "detail": "View ",
+        "documentation": {}
+    },
+    {
         "label": "time",
         "kind": 6,
         "isExtraImport": true,
@@ -129,6 +137,60 @@
         "importPath": "ControllerUser",
         "description": "ControllerUser",
         "peekOfCode": "class Controller:\n    def __init__(self,host , port):\n        \"\"\"Initialize with the DAO instances.\"\"\"\n        self.host = host\n        self.port = port\n        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)\n        self.server_socket.bind((self.host, self.port))\n        print(f\"UDP Server initialized and listening on {self.host}:{self.port}\")\n        try:\n            self.connection = mysql.connector.connect(",
+        "detail": "ControllerUser",
+        "documentation": {}
+    },
+    {
+        "label": "jsonOK",
+        "kind": 5,
+        "importPath": "ControllerUser",
+        "description": "ControllerUser",
+        "peekOfCode": "jsonOK = json.dumps(dataSend)\njsonNoOK = json.dumps(NoOK)\njson_munu = json.dumps(menu_dict)\njson_munu_func = json.dumps(menu_funcUser)\njson_menu_funcGroup = json.dumps(menu_funcGroup)\njson_munu_func3table =json.dumps(menu_func3table)\njson_change = json.dumps(change)\nif __name__ == \"__main__\":\n    view = Controller(\"127.0.0.1\", 12000)\n    view.control()",
+        "detail": "ControllerUser",
+        "documentation": {}
+    },
+    {
+        "label": "jsonNoOK",
+        "kind": 5,
+        "importPath": "ControllerUser",
+        "description": "ControllerUser",
+        "peekOfCode": "jsonNoOK = json.dumps(NoOK)\njson_munu = json.dumps(menu_dict)\njson_munu_func = json.dumps(menu_funcUser)\njson_menu_funcGroup = json.dumps(menu_funcGroup)\njson_munu_func3table =json.dumps(menu_func3table)\njson_change = json.dumps(change)\nif __name__ == \"__main__\":\n    view = Controller(\"127.0.0.1\", 12000)\n    view.control()",
+        "detail": "ControllerUser",
+        "documentation": {}
+    },
+    {
+        "label": "json_munu",
+        "kind": 5,
+        "importPath": "ControllerUser",
+        "description": "ControllerUser",
+        "peekOfCode": "json_munu = json.dumps(menu_dict)\njson_munu_func = json.dumps(menu_funcUser)\njson_menu_funcGroup = json.dumps(menu_funcGroup)\njson_munu_func3table =json.dumps(menu_func3table)\njson_change = json.dumps(change)\nif __name__ == \"__main__\":\n    view = Controller(\"127.0.0.1\", 12000)\n    view.control()",
+        "detail": "ControllerUser",
+        "documentation": {}
+    },
+    {
+        "label": "json_munu_func",
+        "kind": 5,
+        "importPath": "ControllerUser",
+        "description": "ControllerUser",
+        "peekOfCode": "json_munu_func = json.dumps(menu_funcUser)\njson_menu_funcGroup = json.dumps(menu_funcGroup)\njson_munu_func3table =json.dumps(menu_func3table)\njson_change = json.dumps(change)\nif __name__ == \"__main__\":\n    view = Controller(\"127.0.0.1\", 12000)\n    view.control()",
+        "detail": "ControllerUser",
+        "documentation": {}
+    },
+    {
+        "label": "json_menu_funcGroup",
+        "kind": 5,
+        "importPath": "ControllerUser",
+        "description": "ControllerUser",
+        "peekOfCode": "json_menu_funcGroup = json.dumps(menu_funcGroup)\njson_munu_func3table =json.dumps(menu_func3table)\njson_change = json.dumps(change)\nif __name__ == \"__main__\":\n    view = Controller(\"127.0.0.1\", 12000)\n    view.control()",
+        "detail": "ControllerUser",
+        "documentation": {}
+    },
+    {
+        "label": "json_change",
+        "kind": 5,
+        "importPath": "ControllerUser",
+        "description": "ControllerUser",
+        "peekOfCode": "json_change = json.dumps(change)\nif __name__ == \"__main__\":\n    view = Controller(\"127.0.0.1\", 12000)\n    view.control()",
         "detail": "ControllerUser",
         "documentation": {}
     },
@@ -175,6 +237,105 @@
         "description": "usersgroup",
         "peekOfCode": "class usersgroupDao:\n    def __init__(self, connection):\n        \"\"\"Initialize the database connection.\"\"\"\n        try:\n            # Load database config from JSON file\n            # 3with open(\"config.json\") as config_file:\n            #    config = json.load(config_file)\n            self.connection = connection\n            if self.connection.is_connected():\n                print(\"Connected to MySQL database\")",
         "detail": "usersgroup",
+        "documentation": {}
+    },
+    {
+        "label": "dataSend",
+        "kind": 5,
+        "importPath": "View",
+        "description": "View",
+        "peekOfCode": "dataSend = {\n    \"answer\": \"200 OK\",\n}\nNoOK = {\n    \"answer\" : \"don't OK\"\n}\nmenu_dict = {\n    \"register\": \"you are register\",\n    \"topic\": \"---Topic---\",\n    \"options\": [",
+        "detail": "View",
+        "documentation": {}
+    },
+    {
+        "label": "NoOK",
+        "kind": 5,
+        "importPath": "View",
+        "description": "View",
+        "peekOfCode": "NoOK = {\n    \"answer\" : \"don't OK\"\n}\nmenu_dict = {\n    \"register\": \"you are register\",\n    \"topic\": \"---Topic---\",\n    \"options\": [\n        \"1. Users\",\n        \"2. Groups\",\n        \"3. Friends\",",
+        "detail": "View",
+        "documentation": {}
+    },
+    {
+        "label": "menu_dict",
+        "kind": 5,
+        "importPath": "View",
+        "description": "View",
+        "peekOfCode": "menu_dict = {\n    \"register\": \"you are register\",\n    \"topic\": \"---Topic---\",\n    \"options\": [\n        \"1. Users\",\n        \"2. Groups\",\n        \"3. Friends\",\n        \"4. Users in groups\",\n        \"5. User blocking\",\n        \"6. Exit\"",
+        "detail": "View",
+        "documentation": {}
+    },
+    {
+        "label": "menu_funcGroup",
+        "kind": 5,
+        "importPath": "View",
+        "description": "View",
+        "peekOfCode": "menu_funcGroup = {\n    \"topic\": \"--- Subscriber Network Menu ---\",\n    \"options\": [\n        \"1. Delete\",\n        \"2. Update\",\n        \"3. Message\",\n        \"4. Insert\",\n        \"5. Read data group\",\n        \"6. Exit\"\n    ]",
+        "detail": "View",
+        "documentation": {}
+    },
+    {
+        "label": "menu_func3table",
+        "kind": 5,
+        "importPath": "View",
+        "description": "View",
+        "peekOfCode": "menu_func3table = {\n    \"topic\": \"--- Subscriber Network Menu ---\",\n    \"options\": [\n        \"1. Delete\",\n        \"2. Update\",\n        \"3. Insert\",\n        \"4. Read_data_relations\"\n    ]\n}\nchange = {",
+        "detail": "View",
+        "documentation": {}
+    },
+    {
+        "label": "change",
+        "kind": 5,
+        "importPath": "View",
+        "description": "View",
+        "peekOfCode": "change = {\n    \"options\" : \"add change\"\n}\nLogIn_or_Register = {\n    \"options\": [\n        \"1. Register\",\n        \"2. Log_in\",\n        ],\n}\nmenu_change = {",
+        "detail": "View",
+        "documentation": {}
+    },
+    {
+        "label": "LogIn_or_Register",
+        "kind": 5,
+        "importPath": "View",
+        "description": "View",
+        "peekOfCode": "LogIn_or_Register = {\n    \"options\": [\n        \"1. Register\",\n        \"2. Log_in\",\n        ],\n}\nmenu_change = {\n    \"topic\": \"---Fields in user---\",\n    \"options\": [\n        \"1. Name\",",
+        "detail": "View",
+        "documentation": {}
+    },
+    {
+        "label": "menu_change",
+        "kind": 5,
+        "importPath": "View",
+        "description": "View",
+        "peekOfCode": "menu_change = {\n    \"topic\": \"---Fields in user---\",\n    \"options\": [\n        \"1. Name\",\n        \"2. Phone\",\n    ]#,\n    #\"select\": \"Select an option (1-2): \"\n}\ndataGroup = {\n    \"Topic\": \"---Add data group---\",",
+        "detail": "View",
+        "documentation": {}
+    },
+    {
+        "label": "dataGroup",
+        "kind": 5,
+        "importPath": "View",
+        "description": "View",
+        "peekOfCode": "dataGroup = {\n    \"Topic\": \"---Add data group---\",\n    \"Data\": [\n        \"ID group \",\n        \"Name group \"]\n}\ninformationClientB = {\n    \"options\": [\n        \"IP\"\n    ]",
+        "detail": "View",
+        "documentation": {}
+    },
+    {
+        "label": "informationClientB",
+        "kind": 5,
+        "importPath": "View",
+        "description": "View",
+        "peekOfCode": "informationClientB = {\n    \"options\": [\n        \"IP\"\n    ]\n}\ninformationClientB2 = {\n    \"options\": [\n        \"PORT\"\n    ]\n}",
+        "detail": "View",
+        "documentation": {}
+    },
+    {
+        "label": "informationClientB2",
+        "kind": 5,
+        "importPath": "View",
+        "description": "View",
+        "peekOfCode": "informationClientB2 = {\n    \"options\": [\n        \"PORT\"\n    ]\n}",
+        "detail": "View",
         "documentation": {}
     }
 ]
